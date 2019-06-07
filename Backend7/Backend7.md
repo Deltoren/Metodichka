@@ -209,6 +209,8 @@ RewriteBase /
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.+)$ index.php?q=$1 [L,QSA]
+AddDefaultCharset UTF-8
+
 </IfModule>
 ```
 
