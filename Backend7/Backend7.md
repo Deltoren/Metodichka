@@ -425,6 +425,49 @@ stdClass Object
 Для того, чтобы получить JSON достаточно передать объект в ```json_encode($var)```.
 
 ##### OOP
+```php
+class ClassName
+{
+  // (определение класса)
+  public $propertyName;
+  private $propertyName;
+  protected $propertyName;
+}
+```
+Правило хорошего тона: каждый класс помещайте в отдельный файл с названием, совпадающим с именем класса. Например, поместите класс Member в файл Member.php и храните его в папке, допустим, classes.
+
+Объекты же порождаются следующим образом:
+```php
+$member = new Member();
+```
+Работа с объектами: 
+```php
+<?php
+ 
+class Member
+{
+  public $username = "";
+  public function methodName() {
+    // (код)
+  }
+
+  private function methodName() {
+    // (код)
+  }
+
+  protected function methodName() {
+    // (код)
+  }
+}
+ 
+$member = new Member();
+$member->username = "Fred";
+echo $member->username;  // Выведет "Fred"
+ 
+?>
+```
+
+
 
 ### Статьи
 * [Бесплатный сервер](https://beget.com/p54518/free-hosting)
@@ -441,3 +484,4 @@ stdClass Object
 * [Промисы JS](https://learn.javascript.ru/promise)
 * [Работа с БД](https://www.php.net/manual/ru/mysqli.quickstart.statements.php)
 * [Bearer Authentication](https://swagger.io/docs/specification/authentication/bearer-authentication/)
+* [PHP ООП](https://ruseller.com/lessons.php?id=1145)
