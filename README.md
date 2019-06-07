@@ -9,3 +9,4 @@
     4. [Занятие 4](Backend4/Backend4.md)
     5. [Занятие 5](Backend5/Backend5.md)
     6. [Занятие 6](Backend6/Backend6.md)
+    7. [Занятие 7](Backend7/Backend7.md)  
