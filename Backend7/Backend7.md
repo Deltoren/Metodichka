@@ -344,6 +344,41 @@ move_uploaded_file ( string $filename , string $destination ) : bool
 Эта функция проверяет, является ли файл filename загруженным на сервер (переданным по протоколу HTTP POST). Если файл действительно загружен на сервер, он будет перемещён в место, указанное в аргументе destination.
 Если результирующий файл уже существует, он будет перезаписан.
 
+#### Работа с БД
+Для того, чтобы начать работу с БД нужно сначала к ней подключиться. Для этого выполним следующий код: 
+```php
+<?php
+$link = mysqli_connect("127.0.0.1", "my_user", "my_password", "my_db");
+
+if (!$link) {
+    echo "Ошибка: Невозможно установить соединение с MySQL." . PHP_EOL;
+    echo "Код ошибки errno: " . mysqli_connect_errno() . PHP_EOL;
+    echo "Текст ошибки error: " . mysqli_connect_error() . PHP_EOL;
+    exit;
+}
+
+echo "Соединение с MySQL установлено!" . PHP_EOL;
+echo "Информация о сервере: " . mysqli_get_host_info($link) . PHP_EOL;
+$res = $mysqli->query("SELECT id FROM test ORDER BY id ASC");
+if (!$res) //SQL
+{
+    echo "Не удалось выполнить запрос: (" . $mysqli->errno . ") " . $mysqli->error;
+}
+else
+{
+    while ($row = $res->fetch_assoc()) 
+    {
+        echo " id = " . $row['id'] . "\n";
+    }
+}
+
+
+mysqli_close($link); //закрытие соединения, выполняется, когда мы закончили работать с БД
+?>
+```
+
+Более подробно можно почитать [тут](https://www.php.net/manual/ru/mysqli.quickstart.statements.php).
+
 ### Статьи
 * [Бесплатный сервер](https://beget.com/p54518/free-hosting)
 * [Web API ASP.NET Core](https://docs.microsoft.com/ru-ru/aspnet/core/web-api/index?view=aspnetcore-2.2)
@@ -357,3 +392,4 @@ move_uploaded_file ( string $filename , string $destination ) : bool
 * [XMLHttpRequest](https://learn.javascript.ru/ajax-xmlhttprequest)
 * [Fetch API](https://myrusakov.ru/javascript-fetch-api-part-1.html)
 * [Промисы JS](https://learn.javascript.ru/promise)
+* [Работа с БД](https://www.php.net/manual/ru/mysqli.quickstart.statements.php)
