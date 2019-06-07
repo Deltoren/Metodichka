@@ -322,6 +322,27 @@ echo json_encode(array(
 ```
 Более детально данный метод разобран [здесь](https://webdevkin.ru/posts/backend/restful-servis-na-nativnom-php), тут можно почитать про реализацию всех методов и посмотреть примеры обработки запросов. 
 
+#### Особенности работы с файлами
+```php
+<?php
+$uploads_dir = '/uploads';
+foreach ($_FILES["pictures"]["error"] as $key => $error) {
+    if ($error == UPLOAD_ERR_OK) {
+        $tmp_name = $_FILES["pictures"]["tmp_name"][$key];
+        // basename() может предотвратить атаку на файловую систему;
+        // может быть целесообразным дополнительно проверить имя файла
+        $name = basename($_FILES["pictures"]["name"][$key]);
+        move_uploaded_file($tmp_name, "$uploads_dir/$name");
+    }
+}
+?>
+```
+```php 
+move_uploaded_file ( string $filename , string $destination ) : bool
+```
+
+Эта функция проверяет, является ли файл filename загруженным на сервер (переданным по протоколу HTTP POST). Если файл действительно загружен на сервер, он будет перемещён в место, указанное в аргументе destination.
+Если результирующий файл уже существует, он будет перезаписан.
 
 ### Статьи
 * [Бесплатный сервер](https://beget.com/p54518/free-hosting)
