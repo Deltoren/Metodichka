@@ -379,6 +379,53 @@ mysqli_close($link); //закрытие соединения, выполняет
 
 Более подробно можно почитать [тут](https://www.php.net/manual/ru/mysqli.quickstart.statements.php).
 
+#### Аутентификация 
+Аутентификация Bearer токеном это аутентификация, при которой используется токен, дающий понять, что за пользователь сейчас взаимодействует с сайтом. При этом пара логин-пароль передаётся только при получении токена, а значит лишний раз не передаётся по сети. 
+
+Алгоритм: 
+1. Пользователь посылает логин и пароль на сервер (POST). 
+2. Сервер получает эти данные и првоеряет их на корректность. 
+3. Если пользователь найден, сервер генерирует токен, который где-то хранится (например в БД). Обычно у него есть срок годности. 
+4. Токен передаётся пользователю в ответ на его запрос и сохраняется в памяти клиента (например в Local storage JS)
+5. При выполнении каждого запроса, требующего подтверждение пользователя посылается специальный хэдер: ```Authorization: Bearer <token>```, где <токен> - значение токена. 
+
+#### Работа с LocalStorage в JS: 
+```js
+localStorage.setItem('token', token);
+let token = localStorage.getItem('token');
+localStorage.removeItem('token'); //Удаление ключа в случае выхода из учётной записи. 
+localStorage.clear(); //Или полная очистка 
+```
+#### Классы в PHP
+##### StdClass
+По факту, StdClass является пустым динамичным классом, который по поведению поход на JS. 
+Для того, чтобы корректно сформировать ответ в формате JSON как раз можно использовать именно его. 
+```php
+<?php
+$std = new stdClass();
+$std->first = 1;
+$std->second->third = 3;
+print_R($std);
+?>
+```
+
+При выполнении выведет: 
+
+```
+stdClass Object
+(
+    [first] => 1
+    [second] => stdClass Object
+        (
+            [third] => 3
+        )
+
+)
+```
+Для того, чтобы получить JSON достаточно передать объект в ```json_encode($var)```.
+
+##### OOP
+
 ### Статьи
 * [Бесплатный сервер](https://beget.com/p54518/free-hosting)
 * [Web API ASP.NET Core](https://docs.microsoft.com/ru-ru/aspnet/core/web-api/index?view=aspnetcore-2.2)
@@ -393,3 +440,4 @@ mysqli_close($link); //закрытие соединения, выполняет
 * [Fetch API](https://myrusakov.ru/javascript-fetch-api-part-1.html)
 * [Промисы JS](https://learn.javascript.ru/promise)
 * [Работа с БД](https://www.php.net/manual/ru/mysqli.quickstart.statements.php)
+* [Bearer Authentication](https://swagger.io/docs/specification/authentication/bearer-authentication/)
