@@ -299,6 +299,35 @@ echo json_encode(array(
     )); 
 ```
 
+Если попытаться написать универсальную функцию, то выглядть она будет как-то так: 
+```php
+function getFormData($method) {    
+    if ($method === 'GET') return $_GET;
+    if ($method === 'POST' && !empty($_POST)) return $_POST;
+
+    $incomingData = file_get_contents('php://input');
+    $decodedJSON = json_decode($incomingData); //пытаемся преобразовать то, что нам пришло из JSON в объект PHP
+    if ($decodedJSON) 
+    {
+        $data = $decodedJSON;
+    } 
+        else 
+    {
+    $data = array();
+        $exploded = explode('&', file_get_contents('php://input'));     
+        foreach($exploded as $pair) 
+        {
+            $item = explode('=', $pair);
+            if (count($item) == 2) 
+            {
+                $data[urldecode($item[0])] = urldecode($item[1]);
+            }
+        } 
+    }
+    return $data;
+}
+```
+
 Важное пояснение: когда вы отправляете GET-запрос, то все данные у вас хранятся в ПАРАМЕТРАХ запроса, а не в его теле, т.к. в GET тело не используется. 
 Поэтому еесли вы хотите отправить GET-запрос и обработать его, то на стороне JS это будет выглядеть так: 
 ```js 
