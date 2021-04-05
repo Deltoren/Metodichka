@@ -118,18 +118,7 @@ private async Task ConfigureIdentity(IServiceScope scope)
 * Метод `userManager.IsInRoleAsync` проверяет, имеет ли указанный пользователь указанную роль.
 * Метод `userManager.AddToRoleAsync` добавляет указанному пользоваетлю указанную роль.
 
-Теперь можно добавить вызов данного метода в блок, отвечающий за инициализацию базы данных (в методе `Startup.Configure`):
-
-```csharp
-using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-using (var context = scope.ServiceProvider.GetService<ApplicationDbContext>())
-{
-    context.Database.Migrate();
-    this.ConfigureIdentity(scope).GetAwaiter().GetResult();
-}
-```
-
-В результате, при каждом запуске сайта будет выполняться проверка и при необходимости создание роли `Administrators` и пользователя `admin@localhost.local` с паролем по умолчанию `AdminPass123!`.
+В результате, при каждом запуске сайта будет выполняться проверка и при необходимости создание роли `Administrators` и пользователя `admin@localhost.local` с паролем по умолчанию `AdminPass123!`. Для этого автоматически будет вызываться `private async Task ConfigureIdentity(IServiceScope scope)`, описанный ранее. Вызов буде тпроисходить в `Program.cs`.
 
 ### Получение информации о текущем пользователе
 
