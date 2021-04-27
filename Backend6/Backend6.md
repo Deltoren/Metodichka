@@ -68,7 +68,7 @@ ASP.NET Core имеет стандартную подсистему пользо
 
 В случае если на сайте присутствуют привилегированные пользователи (например, администраторы), то необходимо обеспечить механизм их безопасного "появления" на сайте (так как им нельзя просто предоставить возможность зарегистрироваться самостоятельно). Один из способов это сделать - определить встроенную учетную запись администратора, которая автоматически создается вместе с сайтом и которая позволяет управлять остальными пользователями.
 
-В классе `Startup` добавим метод `private async Task ConfigureIdentity(IServiceScope scope)`, который будет отвечать за инициализацию ролей и начальных пользователей сайта со следующей реализацией:
+В классе `DbMigration` добавим метод `private async Task ConfigureIdentity(IServiceScope scope)`, который будет отвечать за инициализацию ролей и начальных пользователей сайта со следующей реализацией:
 
 ```csharp
 private async Task ConfigureIdentity(IServiceScope scope)
@@ -118,18 +118,7 @@ private async Task ConfigureIdentity(IServiceScope scope)
 * Метод `userManager.IsInRoleAsync` проверяет, имеет ли указанный пользователь указанную роль.
 * Метод `userManager.AddToRoleAsync` добавляет указанному пользоваетлю указанную роль.
 
-Теперь можно добавить вызов данного метода в блок, отвечающий за инициализацию базы данных (в методе `Startup.Configure`):
-
-```csharp
-using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-using (var context = scope.ServiceProvider.GetService<ApplicationDbContext>())
-{
-    context.Database.Migrate();
-    this.ConfigureIdentity(scope).GetAwaiter().GetResult();
-}
-```
-
-В результате, при каждом запуске сайта будет выполняться проверка и при необходимости создание роли `Administrators` и пользователя `admin@localhost.local` с паролем по умолчанию `AdminPass123!`.
+В результате, при каждом запуске сайта будет выполняться проверка и при необходимости создание роли `Administrators` и пользователя `admin@localhost.local` с паролем по умолчанию `AdminPass123!`. Для этого автоматически будет вызываться `private async Task ConfigureIdentity(IServiceScope scope)`, описанный ранее. Вызов буде тпроисходить в `Program.cs`.
 
 ### Получение информации о текущем пользователе
 
